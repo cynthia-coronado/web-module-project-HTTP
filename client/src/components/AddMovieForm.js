@@ -1,54 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { useParams, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-import axios from 'axios';
+import axios from 'axios'
 
-const EditMovieForm = (props) => {
-	const { push } = useHistory();
-	const { id } = useParams()
+const AddMovieForm = (props) => {
+    const { push } = useHistory()
+    const { setMovies } = props
+    const { id } = useParams()
 
-	useEffect(() => {
-		axios
-		.get(`http://localhost:5000/api/movies/${id}`)
-		.then(response => {
-			console.log(response);
-			setMovie(response.data)
-		})
-		.catch(error => {
-			console.log(error);
-		})
-	}, [])
-
-	const [movie, setMovie] = useState({
-		title:"",
-		director: "",
-		genre: "",
-		metascore: 0,
-		description: ""
-	});
-	
-	const handleChange = (e) => {
+    const [ movie, setMovie ] = useState({
+        title: '',
+        director: '',
+        genre: '',
+        metascore: 0,
+        description: ''
+    })
+    const handleChange = (event) => {
         setMovie({
             ...movie,
-            [e.target.name]: e.target.value
-        });
+            [event.target.name]: event.target.value
+        })
     }
-
-    const handleSubmit = (e) => {
-		e.preventDefault();
-		axios
-		.put(`http://localhost:5000/api/movies/${id}`, movie)
-		.then(response => {
-			console.log('put data', response);
-			push(`/movies/${id}`)
-		})
-		.catch(error => {
-			console.log(error);
-		})
-	}
-	
-	const { title, director, genre, metascore, description } = movie;
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        axios
+        .post(`http://localhost:5000/api/movies`, movie)
+        .then(response => {
+            console.log('post data', response.data);
+            setMovies(response.data)
+            push(`/movies`)
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+    const { title, director, genre, metascore, description } = movie;
 
     return (
 	<div className="col">
@@ -88,5 +75,4 @@ const EditMovieForm = (props) => {
 		</div>
 	</div>);
 }
-
-export default EditMovieForm;
+export default AddMovieForm
