@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 
+import DeleteMovieModal from './DeleteMovieModal'
+
 import axios from 'axios';
 
 const Movie = (props) => {
     const { addToFavorites, deleteMovie } = props;
 
     const [movie, setMovie] = useState('');
+    const [ showDeleteModal, setShowDeleteModal ] = useState(false)
 
     const { id } = useParams();
     const { push } = useHistory();
 
     const handleDelete = () => {
+        setShowDeleteModal(true)
         deleteMovie(id)
         push('/movies')
     }
